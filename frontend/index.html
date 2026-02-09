@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MADHAV REDDY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fdfaf5;
+      --bg-soft: #f6f8ff;
+      --card: rgba(255, 255, 255, 0.86);
+      --ink: #19233a;
+      --ink-soft: #5a6788;
+      --line: #dce3f4;
+      --accent: #ff6a3d;
+      --accent-2: #2a88ff;
+      --accent-3: #18a47b;
+      --danger: #cc3232;
+      --shadow: 0 18px 40px rgba(25, 35, 58, 0.12);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 520px at 0% -5%, rgba(42, 136, 255, 0.16), transparent 65%),
+        radial-gradient(820px 420px at 90% 4%, rgba(255, 106, 61, 0.18), transparent 62%),
+        linear-gradient(160deg, var(--bg) 0%, var(--bg-soft) 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: min(1040px, 92vw);
+      margin: 44px auto 64px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 2.2vw, 30px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(24, 164, 123, 0.2), transparent 70%);
+      right: -60px;
+      top: -80px;
+      pointer-events: none;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 16px 0 8px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      line-height: 1.07;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 780px;
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 960px) {
+      .workspace {
+        grid-template-columns: minmax(340px, 420px) 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.14rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #b7bfd6;
+      display: inline-block;
+    }
+
+    .status-dot.ok {
+      background: var(--accent-3);
+      box-shadow: 0 0 0 5px rgba(24, 164, 123, 0.16);
+    }
+
+    .status-dot.error {
+      background: var(--danger);
+      box-shadow: 0 0 0 5px rgba(204, 50, 50, 0.15);
+    }
+
+    .mode-switch {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f5f7ff;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 4px;
+      gap: 6px;
+    }
+
+    .mode-btn {
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--ink-soft);
+      font-size: 0.94rem;
+      font-weight: 700;
+      padding: 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .mode-btn.active {
+      color: #fff;
+      background: linear-gradient(120deg, var(--accent-2), #2bb2ff);
+      box-shadow: 0 10px 18px rgba(42, 136, 255, 0.25);
+    }
+
+    .panel {
+      margin-top: 14px;
+      display: none;
+      animation: showPanel 0.28s ease forwards;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes showPanel {
+      from {
+        opacity: 0;
+        transform: translateY(7px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 13px 14px;
+      font-size: 0.96rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 4px rgba(42, 136, 255, 0.15);
+    }
+
+    .drop-zone {
+      width: 100%;
+      border: 2px dashed #c8d3ee;
+      border-radius: 14px;
+      background: #f9fbff;
+      color: var(--ink-soft);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .drop-zone strong {
+      color: var(--ink);
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .drop-zone.active {
+      border-color: var(--accent-2);
+      background: #eef5ff;
+    }
+
+    .file-meta {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      min-height: 1.3em;
+    }
+
+    .options {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 540px) {
+      .options {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      display: block;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    select.input {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%),
+        linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) calc(1em + 1px),
+        calc(100% - 13px) calc(1em + 1px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-right: 34px;
+    }
+
+    .submit-btn {
+      margin-top: 16px;
+      width: 100%;
+      border: 0;
+      border-radius: 13px;
+      padding: 13px 14px;
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(120deg, var(--accent), #ff8f4d);
+      cursor: pointer;
+      box-shadow: 0 14px 20px rgba(255, 106, 61, 0.24);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 24px rgba(255, 106, 61, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.62;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .status {
+      margin-top: 12px;
+      min-height: 1.3em;
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .summary-header {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      min-height: 34px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink-soft);
+      padding: 6px 11px;
+      font-size: 0.81rem;
+      font-weight: 700;
+    }
+
+    .copy-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .summary-text {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      min-height: 250px;
+      font-size: 0.96rem;
+      line-height: 1.68;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+
+    .empty {
+      color: #7d8ba9;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <span class="tag">Link pettu Summary Pattu</span>
+      <h1>YOUTUBE VIDEO SUMMARIZER</h1>
+      <p>
+        Paste a YouTube URL or drop your own media file, then generate a structured summary with concise insights and actionable takeaways
+      </p>
+    </section>
+
+    <section class="workspace">
+      <article class="card">
+        <h2>
+          Input
+          <span id="apiStatus" class="status-dot" title="API status"></span>
+        </h2>
+
+        <div class="mode-switch" role="tablist" aria-label="Input mode">
+          <button type="button" class="mode-btn active" data-mode="youtube">YouTube URL</button>
+          <button type="button" class="mode-btn" data-mode="upload">Upload Video</button>
+        </div>
+
+        <div id="youtubePanel" class="panel active">
+          <label for="youtubeUrl">YouTube Link</label>
+          <input id="youtubeUrl" class="input" type="url" placeholder="https://www.youtube.com/watch?v=..." />
+        </div>
+
+        <div id="uploadPanel" class="panel" aria-hidden="true">
+          <label for="videoFile">Video File</label>
+          <div id="dropZone" class="drop-zone">
+            <strong>Drop media here</strong>
+            or click to choose a file (mp4, webm, mp3, wav, m4a, mpeg, mpga)
+          </div>
+          <input id="videoFile" type="file" accept=".mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm" hidden />
+          <div id="fileMeta" class="file-meta"></div>
+        </div>
+
+        <div class="options">
+          <div>
+            <label for="length">Summary Depth</label>
+            <select id="length" class="input">
+              <option value="brief">Brief</option>
+              <option value="standard" selected>Standard</option>
+              <option value="deep">Deep</option>
+            </select>
+          </div>
+          <div>
+            <label for="focus">Focus (Optional)</label>
+            <input id="focus" class="input" type="text" maxlength="240" placeholder="e.g., focus on business strategy" />
+          </div>
+        </div>
+
+        <button id="submitBtn" class="submit-btn" type="button">Generate Summary</button>
+        <p id="status" class="status"></p>
+      </article>
+
+      <article class="card">
+        <div class="summary-header">
+          <h2>Summary Output</h2>
+          <button id="copyBtn" class="copy-btn" type="button">Copy</button>
+        </div>
+        <div id="metaChips" class="chip-list"></div>
+        <div id="summaryText" class="summary-text">
+          <span class="empty">Your summary will appear here.</span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = window.location.protocol === "file:" ? "http://127.0.0.1:7860" : "";
+    const modeButtons = Array.from(document.querySelectorAll(".mode-btn"));
+    const youtubePanel = document.getElementById("youtubePanel");
+    const uploadPanel = document.getElementById("uploadPanel");
+    const youtubeUrl = document.getElementById("youtubeUrl");
+    const videoFileInput = document.getElementById("videoFile");
+    const dropZone = document.getElementById("dropZone");
+    const fileMeta = document.getElementById("fileMeta");
+    const focusInput = document.getElementById("focus");
+    const lengthInput = document.getElementById("length");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusEl = document.getElementById("status");
+    const summaryText = document.getElementById("summaryText");
+    const metaChips = document.getElementById("metaChips");
+    const apiStatus = document.getElementById("apiStatus");
+    const copyBtn = document.getElementById("copyBtn");
+
+    let activeMode = "youtube";
+    let activeFile = null;
+    let lastSummary = "";
+
+    function setMode(mode) {
+      activeMode = mode;
+      modeButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.mode === mode);
+      });
+      youtubePanel.classList.toggle("active", mode === "youtube");
+      uploadPanel.classList.toggle("active", mode === "upload");
+      uploadPanel.setAttribute("aria-hidden", mode !== "upload");
+      statusEl.textContent = "";
+      statusEl.classList.remove("error");
+    }
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.classList.toggle("error", isError);
+    }
+
+    function setLoading(loading) {
+      submitBtn.disabled = loading;
+      submitBtn.textContent = loading ? "Working..." : "Generate Summary";
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function setFile(file) {
+      activeFile = file || null;
+      if (!activeFile) {
+        fileMeta.textContent = "";
+        return;
+      }
+      fileMeta.textContent = `${activeFile.name} - ${formatBytes(activeFile.size)}`;
+    }
+
+    function updateSummary(summary, meta) {
+      lastSummary = summary || "";
+      if (!summary) {
+        summaryText.innerHTML = '<span class="empty">No summary returned.</span>';
+      } else {
+        summaryText.textContent = summary;
+      }
+
+      metaChips.innerHTML = "";
+      if (!meta || typeof meta !== "object") {
+        return;
+      }
+
+      const chipData = [];
+      if (meta.source) chipData.push(`Source: ${meta.source}`);
+      if (meta.word_count) chipData.push(`Words: ${meta.word_count}`);
+      if (meta.length) chipData.push(`Depth: ${meta.length}`);
+      if (meta.language) chipData.push(`Language: ${meta.language}`);
+      if (meta.model) chipData.push(`Model: ${meta.model}`);
+      if (meta.video_id) chipData.push(`Video ID: ${meta.video_id}`);
+      if (meta.filename) chipData.push(`File: ${meta.filename}`);
+
+      chipData.forEach((item) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = item;
+        metaChips.appendChild(chip);
+      });
+    }
+
+    async function summarizeYoutube() {
+      const url = youtubeUrl.value.trim();
+      if (!url) {
+        throw new Error("Enter a YouTube URL first.");
+      }
+
+      const response = await fetch(`${API_BASE}/api/summarize/youtube`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url,
+          focus: focusInput.value.trim(),
+          length: lengthInput.value,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to summarize YouTube video.");
+      }
+      return data;
+    }
+
+    async function summarizeUpload() {
+      if (!activeFile) {
+        throw new Error("Choose a media file first.");
+      }
+
+      const formData = new FormData();
+      formData.append("video", activeFile);
+      formData.append("focus", focusInput.value.trim());
+      formData.append("length", lengthInput.value);
+
+      const response = await fetch(`${API_BASE}/api/summarize/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to summarize uploaded media.");
+      }
+      return data;
+    }
+
+    async function runSummary() {
+      setLoading(true);
+      setStatus(activeMode === "youtube" ? "Fetching transcript and summarizing..." : "Transcribing upload and summarizing...");
+
+      try {
+        const data = activeMode === "youtube" ? await summarizeYoutube() : await summarizeUpload();
+        updateSummary(data.summary, data.meta);
+        setStatus("Summary generated.");
+      } catch (error) {
+        setStatus(error.message || "Something went wrong.", true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function checkHealth() {
+      try {
+        const response = await fetch(`${API_BASE}/api/health`);
+        if (!response.ok) {
+          throw new Error("health check failed");
+        }
+        apiStatus.classList.add("ok");
+        apiStatus.title = "API connected";
+      } catch (_) {
+        apiStatus.classList.add("error");
+        apiStatus.title = "API unavailable";
+      }
+    }
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.mode));
+    });
+
+    submitBtn.addEventListener("click", runSummary);
+
+    dropZone.addEventListener("click", () => videoFileInput.click());
+    videoFileInput.addEventListener("change", (event) => {
+      setFile(event.target.files?.[0] || null);
+    });
+
+    dropZone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      dropZone.classList.add("active");
+    });
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("active");
+    });
+    dropZone.addEventListener("drop", (event) => {
+      event.preventDefault();
+      dropZone.classList.remove("active");
+      const file = event.dataTransfer.files?.[0] || null;
+      setFile(file);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!lastSummary) {
+        setStatus("No summary to copy yet.", true);
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(lastSummary);
+        setStatus("Summary copied.");
+      } catch (_) {
+        setStatus("Could not copy summary.", true);
+      }
+    });
+
+    checkHealth();
+  </script>
+</body>
+</html>
